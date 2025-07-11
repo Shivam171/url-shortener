@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enter Password</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<div class="w-full max-w-md bg-white shadow-xl rounded-2xl p-8 space-y-6 animate-fade-in">
+    <div class="text-center">
+        <h2 class="text-3xl font-bold text-gray-800">🔒 Protected Link</h2>
+        <p class="mt-2 text-gray-500">Please enter the password to continue</p>
+    </div>
+
+    <!-- Error Message -->
+    <div th:if="${error}" class="bg-red-100 text-red-700 p-3 rounded-lg text-center">
+        <p th:text="${error}"></p>
+    </div>
+
+    <form th:action="@{|/urls/${shortCodeOrAlias}/verify|}" method="post" class="space-y-4" id="passwordForm">
+        <input type="hidden" name="shortCodeOrAlias" th:value="${shortCodeOrAlias}" />
+
+        <div>
+            <label class="block text-sm font-medium text-gray-700" for="password">Password</label>
+            <div class="relative">
+                <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        required
+                        class="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 pr-[60px]"
+                />
+                <button type="button" id="togglePassword"
+                        class="absolute right-1 top-1/2 transform -translate-y-1/2 text-sm bg-blue-600 p-2 mt-[2px] rounded-md text-white">
+                    Show
+                </button>
+            </div>
+        </div>
+
+        <button
+                type="submit"
+                id="submitBtn"
+                class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200 flex items-center justify-center gap-2"
+        >
+            <svg id="loadingIcon" class="hidden animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+            </svg>
+            <span id="submitText">Submit</span>
+        </button>
+
+
+        <div class="flex items-center">
+            <input type="checkbox" id="remember" name="remember" class="mr-2">
+            <label for="remember" class="text-sm text-gray-600">Remember me on this browser</label>
+        </div>
+    </form>
+
+    <p class="text-center text-sm text-gray-400">This step is required for security purposes.</p>
+</div>
+
+<script>
+    const form = document.getElementById("passwordForm");
+    const btn = document.getElementById("submitBtn");
+    const text = document.getElementById("submitText");
+    const loading = document.getElementById("loadingIcon");
+    const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
+
+    form.addEventListener("submit", () => {
+        btn.disabled = true;
+        text.textContent = "Verifying...";
+        loading.classList.remove("hidden");
+    });
+
+    togglePassword.addEventListener("click", () => {
+        const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+        passwordInput.setAttribute("type", type);
+        togglePassword.textContent = type === "password" ? "Show" : "Hide";
+    });
+
+    window.onload = function () {
+        document.getElementById("submitBtn").disabled = false;
+        document.getElementById("submitText").textContent = "Submit";
+        document.getElementById("loadingIcon").classList.add("hidden");
+    };
+</script>
+</body>
+</html>

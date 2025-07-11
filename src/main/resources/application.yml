@@ -1,0 +1,64 @@
+app:
+  base-url: http://localhost:8080 # should be changed
+
+security:
+  cookie-encryption:
+    keys:
+      - password: "encKey1"      # should be changed
+        salt: "a1b2c3d4e5f60708" # should be changed
+      - password: "oldKey"       # should be changed
+        salt: "a1b2c3d4e5f60708" # should be changed
+
+spring:
+  application:
+    name: url-shortener
+
+  redis:
+    host: localhost
+    port: 6379
+
+  kafka:
+    bootstrap-servers: localhost:9094
+    consumer:
+      group-id: analytics-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.value.default.type: com.shvmpk.url_shortener.dto.AnalyticsEvent # Change accordingly
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/db # should be changed
+    username: admin # should be changed
+    password: pass123 # should be changed
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+
+logging:
+  level:
+    org.springframework.security.oauth2: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2.client: DEBUG
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+
+management:
+  endpoint:
+    health:
+      show-details: always
