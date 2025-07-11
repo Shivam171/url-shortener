@@ -123,7 +123,7 @@ PRs, suggestions, and feature requests are welcome. Feel free to open issues or 
 
 ## 🔖 License
 
-[MIT License](https://github.com/Shivam171/url-shortner/blob/main/LICENSE) – use it freely, with credit.
+[MIT License](https://github.com/Shivam171/url-shortener/blob/main/LICENSE) – use it freely, with credit.
 
 ---
 
